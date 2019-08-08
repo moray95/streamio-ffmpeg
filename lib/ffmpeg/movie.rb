@@ -10,6 +10,7 @@ module FFMPEG
     attr_reader :audio_streams, :audio_stream, :audio_codec, :audio_bitrate, :audio_sample_rate, :audio_channels, :audio_tags
     attr_reader :container
     attr_reader :metadata, :format_tags
+    attr_reader :raw
 
     UNSUPPORTED_CODEC_PATTERN = /^Unsupported codec with id (\d+) for input stream (\d+)$/
 
@@ -29,16 +30,13 @@ module FFMPEG
 
       # ffmpeg will output to stderr
       command = [FFMPEG.ffprobe_binary, '-i', path, *%w(-print_format json -show_format -show_streams -show_error)]
-      std_output = ''
-      std_error = ''
 
-      Open3.popen3(*command) do |stdin, stdout, stderr|
-        std_output = stdout.read unless stdout.nil?
-        std_error = stderr.read unless stderr.nil?
-      end
+      std_output, std_error, status = Open3.capture3(*command)
 
       fix_encoding(std_output)
       fix_encoding(std_error)
+
+      @raw = { output: std_output.dup, error: std_error.dup, status: status }
 
       begin
         @metadata = MultiJson.load(std_output, symbolize_keys: true)
