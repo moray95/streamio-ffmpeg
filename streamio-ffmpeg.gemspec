@@ -5,13 +5,12 @@ $:.unshift lib unless $:.include?(lib)
 require "ffmpeg/version"
 
 Gem::Specification.new do |s|
-  s.name                            = "vualto-streamio-ffmpeg"
+  s.name                            = "streamio-ffmpeg"
   s.version                         = FFMPEG::VERSION
   s.authors                         = ["Rackfish AB", "Vualto"]
   s.email                           = ["support@rackfish.com", "support@vualto.com"]
-  s.homepage                        = "https://github.com/vualto/streamio-ffmpeg"
+  s.homepage                        = "https://github.com/moray95/streamio-ffmpeg"
   s.summary                         = "Wraps ffmpeg cli into a ruby gem for reading metadata and transcoding videos."
-  s.metadata['allowed_push_host']   = 'http://rubygems.drm.technology:9292'
   s.license                         = 'MIT'
 
   s.add_dependency('multi_json', '~> 1.8')
